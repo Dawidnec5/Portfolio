@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baza informacyjna zespołu</title>
+<style>
+:root{--head:#1F4E78;--on:#fff;--bg:#f4f6f9;--card:#fff;--ink:#1d2433;--muted:#5d6878;--line:#dfe4ea;--accent:#1F4E78;--accent2:#E8711C;--ok:#2E7D32;--warn:#C62828;--soft:#EAF1F8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#11161d;--card:#1a212b;--ink:#e6ebf1;--muted:#9aa6b5;--line:#2c3644;--accent:#7FB2E5;--accent2:#F29A55;--ok:#71C17A;--warn:#EF7A7A;--soft:#1f2b3a;--head:#16324d;--on:#0d1620}}
+:root[data-theme="dark"]{--head:#16324d;--on:#0d1620;--bg:#11161d;--card:#1a212b;--ink:#e6ebf1;--muted:#9aa6b5;--line:#2c3644;--accent:#7FB2E5;--accent2:#F29A55;--ok:#71C17A;--warn:#EF7A7A;--soft:#1f2b3a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+header{background:var(--head);color:#fff;padding:14px 16px}
+header .wrap{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+header h1{font-size:19px;margin:0}
+header .sub{font-size:12.5px;opacity:.85}
+.badge{background:var(--accent2);color:#fff;border-radius:10px;padding:2px 9px;font-size:11.5px;font-weight:700;letter-spacing:.3px}
+.wrap{max-width:1040px;margin:0 auto}
+main{padding:16px}
+nav.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+nav.tabs button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:20px;font:inherit;cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--on)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:720px){.row{grid-template-columns:1fr}}
+label{font-size:12.5px;color:var(--muted);display:block;margin-bottom:4px}
+select,input[type=search]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--card);color:var(--ink)}
+h2{font-size:17px;margin:0 0 8px;color:var(--accent)}
+h3{font-size:14.5px;margin:0 0 6px;color:var(--accent)}
+.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:4px 10px;font-size:14px}
+.kv b{color:var(--muted);font-weight:600}
+ul.check{list-style:none;padding:0;margin:0}
+ul.check li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--line)}
+ul.check li:last-child{border-bottom:0}
+ul.check input{width:19px;height:19px;margin-top:2px;accent-color:var(--ok);flex:none}
+ul.check .t{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:700;min-width:46px}
+ul.check li.done span.txt{text-decoration:line-through;color:var(--muted)}
+.progress{height:8px;background:var(--soft);border-radius:6px;overflow:hidden;margin:6px 0 2px}
+.progress div{height:100%;background:var(--ok);width:0;transition:width .25s}
+ul.plain{margin:0;padding-left:18px}
+.contact{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.contact:last-child{border-bottom:0}
+.contact a{color:var(--accent);font-weight:700;text-decoration:none;white-space:nowrap}
+.note{background:var(--soft);border-radius:8px;padding:10px 12px;font-size:13.5px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12.5px}
+.pill{display:inline-block;border-radius:10px;padding:1px 8px;font-size:12px;font-weight:700}
+.pill.ok{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.pill.miss{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+mark{background:color-mix(in srgb,var(--accent2) 35%,transparent);color:inherit;border-radius:3px;padding:0 2px}
+.res{padding:9px 0;border-bottom:1px dashed var(--line)}
+.res:last-child{border-bottom:0}
+.res small{color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:7px 12px;font:inherit;font-size:13.5px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+footer{font-size:12px;color:var(--muted);text-align:center;padding:10px 16px 24px}
+[hidden]{display:none!important}
+@media print{header,nav.tabs,.actions,footer,#pickCard{display:none!important}body{background:#fff}.card{border:1px solid #bbb;break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div><h1>Baza informacyjna zespołu</h1>
+  <div class="sub">Sprawdź sam: co robisz, co zabierasz, za co odpowiadasz i do kogo dzwonić</div></div>
+  <span class="badge">PROTOTYP · DANE PRZYKŁADOWE</span>
+</div></header>
+
+<main class="wrap">
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="moje">Moja karta zadań</button>
+    <button role="tab" aria-selected="false" data-tab="szukaj">Szukaj</button>
+    <button role="tab" aria-selected="false" data-tab="koord">Dla koordynatora</button>
+    <button role="tab" aria-selected="false" data-tab="jak">Jak to działa</button>
+  </nav>
+
+  <!-- MOJA KARTA -->
+  <section id="tab-moje">
+    <div class="card" id="pickCard">
+      <div class="row">
+        <div><label for="ev">Wydarzenie</label><select id="ev"></select></div>
+        <div><label for="role">Moja rola</label><select id="role"></select></div>
+      </div>
+    </div>
+    <div id="sheet"></div>
+  </section>
+
+  <!-- SZUKAJ -->
+  <section id="tab-szukaj" hidden>
+    <div class="card">
+      <label for="q">Czego szukasz? (np. klucz, ulotki, deszcz, dziecko, rzutnik)</label>
+      <input type="search" id="q" placeholder="Wpisz słowo…" autocomplete="off">
+    </div>
+    <div class="card" id="results"><span class="muted">Wpisz co najmniej 2 litery.</span></div>
+  </section>
+
+  <!-- KOORDYNATOR -->
+  <section id="tab-koord" hidden>
+    <div class="card">
+      <h2>Obsada ról</h2>
+      <p class="muted" style="margin-top:0">Ile osób potrzeba, ile jest zapisanych i gdzie brakuje ludzi. Na czerwono: braki.</p>
+      <div style="overflow-x:auto"><table id="staff"></table></div>
+    </div>
+  </section>
+
+  <!-- JAK -->
+  <section id="tab-jak" hidden>
+    <div class="card">
+      <h2>Jak to działa</h2>
+      <ul class="plain">
+        <li><b>Wolontariusz lub członek zespołu</b> wybiera wydarzenie i swoją rolę, a strona pokazuje jego kartę: kiedy i gdzie, co zrobić (z odhaczaniem), co zabrać, za co odpowiada i do kogo dzwonić.</li>
+        <li><b>Odhaczone zadania</b> zapamiętują się na telefonie. Kartę można też wydrukować.</li>
+        <li><b>Koordynator nie musi programować.</b> W wersji docelowej wszystkie dane są w zwykłym arkuszu Google z zakładkami: <i>Wydarzenia, Role, Zadania, Do zabrania, Kontakty, Pytania</i>. Zmiana w arkuszu od razu pojawia się na stronie.</li>
+        <li><b>Gdzie to umieścić:</b> jako podstronę w strefie dla członków na stronie organizacji (np. WordPress) albo jako osobny link.</li>
+        <li><b>Dane osobowe:</b> na stronie są tylko role i numery dyżurne koordynatorów. Listy osób zostają w arkuszu z dostępem dla koordynatorów.</li>
+      </ul>
+      <p class="note">Wszystkie wydarzenia, osoby i numery w tym prototypie są <b>wymyślone</b>, żeby pokazać działanie.</p>
+    </div>
+  </section>
+</main>
+<footer>Prototyp · dane fikcyjne · działa bez internetu (jeden plik HTML)</footer>
+
+<script>
+/* ====== DANE (w wersji docelowej: arkusz Google) ====== */
+const DATA = {
+  events: [
+    {id:"fr", name:"Festyn rodzinny w parku", city:"Miasto A", date:"2026-06-14", time:"10:00–17:00",
+     place:"Park Miejski, polana przy fontannie (przykład)", meet:"09:00, namiot organizatora przy wejściu", coord:"k1"},
+    {id:"kf", name:"Konferencja i targi organizacji", city:"Miasto B", date:"2026-09-26", time:"09:00–16:00",
+     place:"Centrum konferencyjne, hala 2 (przykład)", meet:"08:00, recepcja główna", coord:"k3"},
+    {id:"ws", name:"Warsztaty dla uczniów", city:"Miasto C", date:"2026-10-08", time:"08:30–11:00",
+     place:"Szkoła Podstawowa (przykład), sala 14", meet:"08:00, portiernia szkoły", coord:"k4"}
+  ],
+  contacts: {
+    k1:{name:"Koordynator wydarzenia – Anna", phone:"600 000 001"},
+    k2:{name:"Koordynator stoisk – Piotr", phone:"600 000 002"},
+    k3:{name:"Koordynatorka konferencji – Ewa", phone:"600 000 003"},
+    k4:{name:"Koordynator warsztatów – Marek", phone:"600 000 004"},
+    med:{name:"Punkt medyczny (dyżur)", phone:"600 000 099"},
+    alarm:{name:"Numer alarmowy", phone:"112"}
+  },
+  roles: [
+    {ev:"fr", id:"info", name:"Punkt informacyjny", need:3, have:3, contact:"k1",
+     resp:["Udzielanie informacji gościom (program, toalety, atrakcje)","Rozdawanie ulotek i mapek","Przyjmowanie zgłoszeń o zgubionych rzeczach i zagubionych dzieciach"]},
+    {ev:"fr", id:"stoisko", name:"Stoisko z grą edukacyjną", need:4, have:2, contact:"k2",
+     resp:["Prowadzenie gry dla dzieci","Pilnowanie materiałów i rekwizytów","Wydawanie nagród po ukończonej grze"]},
+    {ev:"fr", id:"porzadek", name:"Porządek i logistyka", need:3, have:1, contact:"k1",
+     resp:["Rozstawienie i złożenie namiotów","Pilnowanie ciągów komunikacyjnych","Segregacja śmieci po wydarzeniu"]},
+    {ev:"kf", id:"rejestracja", name:"Rejestracja uczestników", need:4, have:4, contact:"k3",
+     resp:["Sprawdzanie uczestników na liście","Wydawanie identyfikatorów i materiałów","Kierowanie gości do sal"]},
+    {ev:"kf", id:"sala", name:"Opiekun sali", need:2, have:1, contact:"k3",
+     resp:["Pilnowanie czasu wystąpień","Obsługa mikrofonów i rzutnika","Zbieranie pytań od publiczności"]},
+    {ev:"ws", id:"prowadzacy", name:"Prowadzący warsztaty", need:2, have:2, contact:"k4",
+     resp:["Prowadzenie zajęć według scenariusza (45 min)","Pokaz filmu i prezentacji","Rozmowa z nauczycielem po zajęciach"]},
+    {ev:"ws", id:"asystent", name:"Asystent prowadzącego", need:2, have:1, contact:"k4",
+     resp:["Rozdawanie kart pracy","Pomoc przy ćwiczeniu w grupach","Zebranie ankiet od uczniów"]}
+  ],
+  tasks: {
+    "fr/info":[["09:00","Zgłoś się w namiocie organizatora, odbierz identyfikator i kamizelkę"],["09:20","Rozłóż ulotki, mapki i tabliczkę „Informacja”"],["10:00","Start: witasz gości i odpowiadasz na pytania"],["13:00","Przerwa 30 min (zamiana z drugą osobą)"],["17:00","Spakuj materiały, oddaj kamizelkę i identyfikator"]],
+    "fr/stoisko":[["09:00","Odbierz rekwizyty i karty gry z magazynku (klucz u koordynatora stoisk)"],["09:30","Przygotuj stanowisko gry, sprawdź komplet kart"],["10:00","Prowadzisz grę: grupy po 5 dzieci, ok. 10 min"],["13:30","Przerwa 30 min"],["17:00","Spakuj rekwizyty, policz nagrody i karty, oddaj klucz"]],
+    "fr/porzadek":[["08:30","Rozstawienie namiotów z ekipą (rękawice w skrzyni nr 1)"],["10:00","Obchód co godzinę: kosze, przejścia, kable"],["16:30","Zbieranie śmieci z terenu"],["17:00","Składanie namiotów i załadunek busa"]],
+    "kf/rejestracja":[["08:00","Odbierz listy uczestników, identyfikatory i torby z materiałami"],["08:30","Przygotuj stanowisko: alfabetyczne pudełka z identyfikatorami"],["09:00","Rejestracja uczestników"],["12:00","Przerwa 30 min"],["16:00","Policz niewydane identyfikatory, oddaj listy koordynatorce"]],
+    "kf/sala":[["08:00","Sprawdź rzutnik, mikrofony i baterie zapasowe"],["09:00","Prowadzisz harmonogram sali, pokazujesz kartki z czasem"],["16:00","Wyłącz sprzęt, zgłoś usterki koordynatorce"]],
+    "ws/prowadzacy":[["08:00","Zgłoś się na portierni, wpisz się do księgi wejść"],["08:10","Podłącz laptop, sprawdź rzutnik i dźwięk"],["08:30","Zajęcia według scenariusza"],["09:15","Rozmowa z nauczycielem, zebranie ankiet"],["11:00","Druga grupa, potem krótki raport dla koordynatora"]],
+    "ws/asystent":[["08:00","Zgłoś się na portierni, wpisz się do księgi wejść"],["08:15","Rozłóż karty pracy na ławkach"],["08:30","Pomagasz prowadzącemu, pilnujesz czasu ćwiczeń"],["09:10","Zbierasz ankiety i karty pracy do teczki"]]
+  },
+  bring: {
+    "fr/info":["Wygodne buty i strój na pogodę","Naładowany telefon","Długopis"],
+    "fr/stoisko":["Wygodne buty","Bidon z wodą","Dobry humor – dużo dzieci!"],
+    "fr/porzadek":["Ubranie robocze","Rękawice (są też na miejscu)","Peleryna na wypadek deszczu"],
+    "kf/rejestracja":["Strój schludny, wygodne buty","Naładowany telefon","Długopis"],
+    "kf/sala":["Zegarek lub telefon do pilnowania czasu","Kartki z czasem (są w teczce)","Wygodne buty"],
+    "ws/prowadzacy":["Laptop z prezentacją i filmem (kopia na pendrive)","Scenariusz zajęć","Dowód osobisty"],
+    "ws/asystent":["Teczka na ankiety","Dowód osobisty","Zegarek lub telefon do pilnowania czasu"]
+  },
+  rules: {
+    all:["Masz na sobie identyfikator przez cały czas.","Nie robisz zdjęć dzieciom bez zgody opiekuna.","Zagubione dziecko: zostań z nim w widocznym miejscu i zadzwoń do koordynatora wydarzenia."],
+    ws:["Nie zostajesz sam na sam z uczniem, drzwi sali są otwarte."],
+    kf:["Listy uczestników zostają na stanowisku i nie są fotografowane (dane osobowe)."]
+  },
+  faq: [
+    ["Co jeśli się spóźnię?","Zadzwoń od razu do koordynatora swojej roli (numer na karcie)."],
+    ["Co jeśli pada deszcz?","Wydarzenia plenerowe odbywają się w każdą pogodę. Zabierz pelerynę, zapasowe są w skrzyni nr 1."],
+    ["Gdzie jest klucz do magazynku?","U koordynatora stoisk. Pobierasz go za podpisem i oddajesz po wydarzeniu."],
+    ["Czy dostanę posiłek?","Tak, ciepły posiłek w przerwie, w strefie dla zespołu."],
+    ["Zgubione dziecko – co robię?","Zostań z dzieckiem w widocznym miejscu, nie odchodź i zadzwoń do koordynatora wydarzenia. Ogłoszenie robi punkt informacyjny."],
+    ["Co jeśli ktoś źle się poczuje?","Dzwoń do punktu medycznego, w nagłym wypadku na 112."]
+  ]
+};
+
+/* ====== LOGIKA ====== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store = { get(k){ try { return JSON.parse(localStorage.getItem(k)) } catch(e){ return null } },
+                set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)) } catch(e){} } };
+const fmtDate = d => new Date(d+"T12:00:00").toLocaleDateString("pl-PL",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const tel = p => p.replace(/\s/g,"");
+
+function fillEvents(){
+  $("#ev").innerHTML = DATA.events.map(e => `<option value="${e.id}">${esc(e.name)} · ${esc(e.city)} · ${e.date}</option>`).join("");
+  const last = store.get("bw_last"); if (last && DATA.events.some(e=>e.id===last.ev)) $("#ev").value = last.ev;
+  fillRoles(last && last.role);
+}
+function fillRoles(pref){
+  const ev = $("#ev").value;
+  const roles = DATA.roles.filter(r => r.ev === ev);
+  $("#role").innerHTML = roles.map(r => `<option value="${r.id}">${esc(r.name)}</option>`).join("");
+  if (pref && roles.some(r=>r.id===pref)) $("#role").value = pref;
+  render();
+}
+function render(){
+  const ev = DATA.events.find(e => e.id === $("#ev").value);
+  const role = DATA.roles.find(r => r.ev === ev.id && r.id === $("#role").value);
+  const key = ev.id + "/" + role.id;
+  store.set("bw_last", {ev: ev.id, role: role.id});
+  const done = store.get("bw_done_" + key) || [];
+  const tasks = DATA.tasks[key] || [];
+  const rules = [...DATA.rules.all, ...(DATA.rules[ev.id] || [])];
+  const c = [DATA.contacts[role.contact], DATA.contacts[ev.coord], DATA.contacts.med, DATA.contacts.alarm]
+            .filter((x,i,a) => a.indexOf(x) === i);
+  $("#sheet").innerHTML = `
+    <div class="card">
+      <div class="actions" style="justify-content:space-between;align-items:center">
+        <h2 style="margin:0">${esc(role.name)} <span class="muted" style="font-weight:400">· ${esc(ev.name)}</span></h2>
+        <div class="actions"><button class="btn" id="print">Drukuj kartę</button><button class="btn" id="reset">Wyczyść odhaczenia</button></div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Kiedy i gdzie</h3>
+        <div class="kv"><b>Data</b><span>${fmtDate(ev.date)}</span><b>Godziny</b><span>${esc(ev.time)}</span>
+        <b>Miejsce</b><span>${esc(ev.place)}, ${esc(ev.city)}</span><b>Zbiórka</b><span><b style="color:var(--ink)">${esc(ev.meet)}</b></span></div>
+      </div>
+      <div class="card"><h3>Za co odpowiadam</h3><ul class="plain">${role.resp.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+      <div class="card" style="grid-column:1/-1"><h3>Co mam zrobić</h3>
+        <div class="progress"><div id="bar"></div></div><div class="muted" id="cnt" style="font-size:12.5px;margin-bottom:4px"></div>
+        <ul class="check" id="tasks">${tasks.map((t,i)=>`<li class="${done.includes(i)?'done':''}"><input type="checkbox" data-i="${i}" ${done.includes(i)?'checked':''} aria-label="Zrobione"><span class="t">${t[0]}</span><span class="txt">${esc(t[1])}</span></li>`).join("")}</ul>
+      </div>
+      <div class="card"><h3>Co zabrać / przygotować</h3><ul class="plain">${(DATA.bring[key]||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+      <div class="card"><h3>Do kogo dzwonić</h3>${c.map(p=>`<div class="contact"><span>${esc(p.name)}</span><a href="tel:${tel(p.phone)}">${esc(p.phone)}</a></div>`).join("")}</div>
+      <div class="card" style="grid-column:1/-1"><h3>Ważne zasady</h3><ul class="plain">${rules.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+    </div>`;
+  const upd = () => { const n = $("#tasks").querySelectorAll("input:checked").length;
+    $("#bar").style.width = (tasks.length ? 100*n/tasks.length : 0) + "%";
+    $("#cnt").textContent = `Zrobione: ${n} z ${tasks.length}`; };
+  $("#tasks").addEventListener("change", e => {
+    const i = +e.target.dataset.i; let d = store.get("bw_done_" + key) || [];
+    d = e.target.checked ? [...new Set([...d, i])] : d.filter(x => x !== i);
+    store.set("bw_done_" + key, d); e.target.closest("li").classList.toggle("done", e.target.checked); upd(); });
+  $("#print").onclick = () => window.print();
+  $("#reset").onclick = () => { store.set("bw_done_" + key, []); render(); };
+  upd();
+}
+
+/* wyszukiwarka po wszystkim */
+function search(q){
+  q = q.trim().toLowerCase();
+  if (q.length < 2) { $("#results").innerHTML = '<span class="muted">Wpisz co najmniej 2 litery.</span>'; return; }
+  const hl = s => esc(s).replace(new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + ")","gi"), "<mark>$1</mark>");
+  const out = [];
+  const evName = id => DATA.events.find(e=>e.id===id).name;
+  DATA.roles.forEach(r => {
+    const key = r.ev + "/" + r.id, where = `${evName(r.ev)} → ${r.name}`;
+    r.resp.forEach(x => x.toLowerCase().includes(q) && out.push([where+" · obowiązek", x, r.ev, r.id]));
+    (DATA.tasks[key]||[]).forEach(t => t[1].toLowerCase().includes(q) && out.push([where+" · "+t[0], t[1], r.ev, r.id]));
+    (DATA.bring[key]||[]).forEach(x => x.toLowerCase().includes(q) && out.push([where+" · do zabrania", x, r.ev, r.id]));
+  });
+  DATA.faq.forEach(f => (f[0]+" "+f[1]).toLowerCase().includes(q) && out.push(["Pytanie: "+f[0], f[1]]));
+  Object.values(DATA.rules).flat().forEach(x => x.toLowerCase().includes(q) && out.push(["Zasada", x]));
+  $("#results").innerHTML = out.length ? out.map(o => `<div class="res"><small>${esc(o[0])}</small><div>${hl(o[1])}</div>${o[2]?`<button class="btn" style="margin-top:4px" data-ev="${o[2]}" data-role="${o[3]}">Otwórz kartę</button>`:""}</div>`).join("")
+                                      : '<span class="muted">Nic nie znaleziono. Zadzwoń do koordynatora.</span>';
+}
+$("#results").addEventListener("click", e => { const b = e.target.closest("button[data-ev]"); if (!b) return;
+  $("#ev").value = b.dataset.ev; fillRoles(b.dataset.role); showTab("moje"); });
+
+function staff(){
+  let rows = "<tr><th>Wydarzenie</th><th>Rola</th><th>Potrzeba</th><th>Zapisani</th><th>Status</th><th>Kontakt</th></tr>";
+  DATA.roles.forEach(r => { const e = DATA.events.find(x=>x.id===r.ev); const miss = r.need - r.have;
+    rows += `<tr><td>${esc(e.name)}<br><small class="muted">${esc(e.city)} · ${e.date}</small></td><td>${esc(r.name)}</td><td>${r.need}</td><td>${r.have}</td>
+      <td>${miss>0?`<span class="pill miss">brakuje ${miss}</span>`:'<span class="pill ok">komplet</span>'}</td><td>${esc(DATA.contacts[r.contact].name)}</td></tr>`; });
+  $("#staff").innerHTML = rows;
+}
+
+function showTab(t){
+  document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === t));
+  ["moje","szukaj","koord","jak"].forEach(x => $("#tab-"+x).hidden = x !== t);
+  if (t === "szukaj") $("#q").focus();
+}
+document.querySelector("nav.tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) showTab(b.dataset.tab); });
+$("#ev").addEventListener("change", () => fillRoles());
+$("#role").addEventListener("change", render);
+$("#q").addEventListener("input", e => search(e.target.value));
+fillEvents(); staff();
+</script>
+</body>
+</html>
