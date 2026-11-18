@@ -1,6 +1,6 @@
 # Baza informacyjna dla zespołu przy wydarzeniach
 
-Prototyp aplikacji webowej w jednym pliku: [index.html](index.html). **[Otwórz demo w przeglądarce](https://dawidnec5.github.io/Portfolio/05_baza_informacyjna/)** Działa w przeglądarce na komputerze i telefonie, bez instalacji i bez internetu. Dane fikcyjne.
+Prototyp aplikacji webowej w jednym pliku: [index.html](index.html). **[Otwórz demo w przeglądarce](https://dawidnec5.github.io/Portfolio/06_baza_informacyjna/)** Działa w przeglądarce na komputerze i telefonie, bez instalacji i bez internetu. Dane fikcyjne.
 
 **Problem:** członkowie zespołu dzwonią do koordynatora z pytaniami: co mam zrobić, co przygotować, za co odpowiadam, gdzie jest zbiórka.
 
